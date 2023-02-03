@@ -15,7 +15,7 @@ jobs:
           distribution: 'temurin'
           architecture: x64
           cache: maven
-      - name: Build with Maven
+      - name: Build jar
         run: ./mvnw -e clean package
       - name: Upload artifact
         uses: actions/upload-artifact@v3
@@ -23,3 +23,8 @@ jobs:
           name: example.jar
           path: target/*.jar
 
+      - name: Build image
+        run: ./mvnw -e jib:build -DskipTests \
+              -Djib.to.image=ghcr.io/hyakutem/example:latest \
+              -Djib.to.auth.username=hyakutem \
+              -Djib.to.auth.password=${{ secrets.GITHUB_TOKEN }}
