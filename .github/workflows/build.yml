@@ -24,7 +24,7 @@ jobs:
           path: target/*.jar
 
       - name: Build image
-        run: ./mvnw -e jib:build -DskipTests \
+        run: ./mvnw -e compile jib:build -DskipTests \
               -Djib.to.image=ghcr.io/hyakutem/example:latest \
               -Djib.to.auth.username=hyakutem \
               -Djib.to.auth.password=${{ secrets.GITHUB_TOKEN }}
