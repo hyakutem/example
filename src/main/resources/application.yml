@@ -1,0 +1,85 @@
+exampleapp:
+  contents: "example default text on application.yml !!"
+
+server:
+  port: 8080
+  # https://spring.pleiades.io/spring-boot/docs/3.0.1/reference/html/web.html#web.graceful-shutdown
+  shutdown: graceful
+  tomcat:
+    threads:
+      max: 200
+    connection-timeout: 30s
+    max-http-form-post-size: 2MB
+    keep-alive-timeout: 60s
+    max-keep-alive-requests: 100
+    max-connections: 8192
+    accept-count: 100
+    # https://tomcat.apache.org/tomcat-10.1-doc/config/valve.html#Access_Logging
+    accesslog:
+      enabled: true
+      pattern: '%{X-Forwarded-For}i %h %l %u %t "%r" %s %b "%{Referer}i" "%{User-Agent}i" %D %S %I %{X-Request-ID}i'
+      directory: /dev
+      prefix: stdout
+      buffered: false
+      suffix: ""
+      file-date-format: ""
+    redirect-context-root: false
+  # https://spring.pleiades.io/spring-boot/docs/current/reference/html/howto.html#howto.webserver.use-behind-a-proxy-server
+  forward-headers-strategy: NATIVE
+
+# https://spring.pleiades.io/spring-boot/docs/current/reference/html/web.html#web.graceful-shutdown
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+# https://spring.pleiades.io/spring-boot/docs/current/reference/html/features.html#features.logging.custom-log-configuration
+# Hint: LOG_LEVEL_PATTERN のみを上書きすることで、MDCコンテンツを埋め込む
+logging:
+  pattern:
+    level: "%X{X-Request-ID} %5p"
+
+# Actuator: https://spring.pleiades.io/spring-boot/docs/3.0.1/reference/html/actuator.html
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    beans:
+      cache:
+        time-to-live: 1s
+    health:
+      show-details: ALWAYS
+      probes:
+        enabled: true
+    shutdown:
+      enabled: true
+  health:
+    defaults:
+      enabled: true
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+    git:
+      mode: "full"
+  # prometheusのmetrics出力にapplication識別用のタグを追加する
+  metrics:
+    tags:
+      application: "@project.artifactId@"
+
+# "@..@"はmavenのresource filteringで置換される
+info:
+  app:
+    message: "this info is shown on the info endpoint of actuator."
+    encoding: "@project.build.sourceEncoding@"
+    java:
+      source: "@java.version@"
+      target: "@java.version@"

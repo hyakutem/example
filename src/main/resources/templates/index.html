@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="k8s関連の各種動作確認用Webアプリケーション" />
+		<title>example</title>
+	</head>
+	<body>
+		<div>
+			<p th:text="${contents}">example default text on thymeleaf template!!</p>
+		</div>
+		<div>
+			<p>テスト</p>
+		</div>
+		<ul>
+			<li><a href="https://github.com/hyakutem/example" target="_blank">ソースコード - https://github.com/hyakutem/example</a></li>
+			<li><a href="/actuator">/actuator</a></li>
+			<li><a href="/delay/1000">指定時間Sleepして"OK"を返す - /delay/{millis}</a></li>
+			<li><a href="/rdelay/1000">指定時間以内でランダムにSleepして"OK"を返す - /rdelay/{millis}</a></li>
+			<li><a href="/load/cpu">CPUに少し負荷かける - /load/cpu</a></li>
+		</ul>
+	</body>
+</html>
