@@ -1,29 +1,16 @@
-name: Java CI
-
-on: [push]
+name: build
+on:
+  push:
+    branches:
+      - main
+      - develop
 
 jobs:
   build:
-    runs-on: [self-hosted, linux, x64]
-
+    runs-on: self-hosted
+    container:
+      image: maven:3.8-amazoncorretto-17
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          architecture: x64
-          cache: maven
-      - name: Build jar
-        run: ./mvnw -e clean package
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: example.jar
-          path: target/*.jar
-
-      - name: Build image
+      - name: mvn build
         run: |
-          ./mvnw -e compile jib:buildTar -DskipTests \
-            -Djib.to.image=ghcr.io/hyakutem/example:latest
+          mvn -e clean package
