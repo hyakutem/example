@@ -11,6 +11,7 @@ jobs:
     container:
       image: maven:3.8-amazoncorretto-17
     steps:
+      - uses: actions/checkout@v3
       - name: mvn build
         run: |
           mvn -e clean package
